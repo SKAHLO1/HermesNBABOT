@@ -1,0 +1,41 @@
+# Hermes Agent configuration for HermesNBA
+# Copy to ~/.hermes/config.yaml  (or run: hermes config edit)
+# API keys go in ~/.hermes/.env — NOT here.
+# Switch provider/model interactively at any time with: hermes model
+
+# ── LLM provider ─────────────────────────────────────────────────────────────
+# Set via `hermes model` (OAuth for Nous Portal) or by setting
+# OPENAI_BASE_URL + OPENAI_API_KEY in ~/.hermes/.env for a custom endpoint.
+# Example for Nous Portal after OAuth:
+#   provider: nous
+#   model: hermes-4-70b
+
+# ── Memory ────────────────────────────────────────────────────────────────────
+memory:
+  memory_enabled: true          # Persist MEMORY.md facts across sessions
+  user_profile_enabled: true    # Build a USER.md profile over time
+  memory_char_limit: 2200       # ~800 tokens
+  user_char_limit: 1375         # ~500 tokens
+
+# ── Agent behaviour ───────────────────────────────────────────────────────────
+agent:
+  max_turns: 90                 # Max tool-call iterations per conversation turn
+
+# ── Context compression ───────────────────────────────────────────────────────
+compression:
+  enabled: true
+  threshold: 0.50               # Compress when context hits 50% of limit
+
+# ── MCP servers — expose NBA tools to Hermes via Model Context Protocol ───────
+# This is the recommended way to plug custom tools into Hermes Agent.
+# Run `python mcp_server.py` first, then Hermes connects automatically.
+mcp_servers:
+  nba-tools:
+    command: python
+    args: ["mcp_server.py"]
+    env:
+      BALLDONTLIE_API_KEY: "${BALLDONTLIE_API_KEY}"
+
+# ── Messaging gateway ─────────────────────────────────────────────────────────
+# Configure interactively with: hermes gateway setup
+# Secrets (bot tokens, user IDs) go in ~/.hermes/.env — not here.

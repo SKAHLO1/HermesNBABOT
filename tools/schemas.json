@@ -1,0 +1,212 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_all_teams",
+      "description": "Return all 30 NBA teams with IDs, names, abbreviations, and conference/division info.",
+      "parameters": { "type": "object", "properties": {}, "required": [] }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_team",
+      "description": "Return detailed info for a single NBA team by its numeric ID.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team_id": { "type": "integer", "description": "The BallDontLie team ID." }
+        },
+        "required": ["team_id"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "search_player",
+      "description": "Search for NBA players by name. Returns up to 10 matches with player IDs.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Full or partial player name, e.g. 'LeBron' or 'Stephen Curry'." }
+        },
+        "required": ["name"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_player_season_averages",
+      "description": "Get per-game season averages (PTS, REB, AST, FG%, 3P%, etc.) for one or more players.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "player_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "List of BallDontLie player IDs."
+          },
+          "season": { "type": "integer", "description": "Season year, e.g. 2024 for the 2024-25 season." }
+        },
+        "required": ["player_ids", "season"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "compute_player_averages",
+      "description": "Free-tier alternative to season_averages. Fetches raw box score game stats and computes per-game averages (pts, reb, ast, stl, blk, fg_pct, fg3_pct, ft_pct). Use this instead of get_player_season_averages on the free BallDontLie tier.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "player_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "List of BallDontLie player IDs."
+          },
+          "season": { "type": "integer", "description": "Season year, e.g. 2024 for the 2024-25 season." },
+          "last_n": { "type": "integer", "description": "If > 0, only average the last N games (e.g. 5 for recent form). Default 0 = full season.", "default": 0 }
+        },
+        "required": ["player_ids", "season"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_player_game_stats",
+      "description": "Get per-game box score stats for specific players, optionally filtered by season or game IDs.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "player_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "List of BallDontLie player IDs."
+          },
+          "seasons": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Optional list of season years to filter by."
+          },
+          "game_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Optional list of game IDs to filter by."
+          },
+          "per_page": { "type": "integer", "description": "Results per page, max 100.", "default": 25 }
+        },
+        "required": ["player_ids"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_todays_games",
+      "description": "Return all NBA games scheduled for today, including teams and current scores.",
+      "parameters": { "type": "object", "properties": {}, "required": [] }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_upcoming_games",
+      "description": "Return all NBA games scheduled in the next N days.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "days_ahead": { "type": "integer", "description": "Number of days to look ahead (default 7).", "default": 7 }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_games",
+      "description": "Fetch NBA games with optional filters for date, team IDs, and season.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "date_str": { "type": "string", "description": "Filter by a specific date in YYYY-MM-DD format." },
+          "team_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Filter by one or more team IDs."
+          },
+          "seasons": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "description": "Filter by one or more season years."
+          },
+          "per_page": { "type": "integer", "default": 25 }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_team_season_stats",
+      "description": "Return all individual game stats for a team in a season — useful for calculating rolling form, home/away splits, and pace.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team_id": { "type": "integer" },
+          "season": { "type": "integer", "description": "Season year, e.g. 2024." },
+          "per_page": { "type": "integer", "default": 82 }
+        },
+        "required": ["team_id", "season"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_standings",
+      "description": "Return conference and division standings including win/loss record, win percentage, and streak.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "season": { "type": "integer", "description": "Season year, e.g. 2024." }
+        },
+        "required": ["season"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_game_odds",
+      "description": "Return moneyline, spread, and over/under betting odds for a specific game (requires All-Star API tier).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "game_id": { "type": "integer" }
+        },
+        "required": ["game_id"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_player_props",
+      "description": "Return player prop bet lines (points, rebounds, assists, etc.) for a player in a specific game.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "game_id": { "type": "integer" },
+          "player_id": { "type": "integer" }
+        },
+        "required": ["game_id", "player_id"]
+      }
+    }
+  }
+]
